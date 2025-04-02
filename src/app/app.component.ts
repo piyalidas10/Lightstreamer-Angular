@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AgGridModule } from 'ag-grid-angular';
 import { ColDef, GridReadyEvent, GetRowIdFunc, GetRowIdParams, GridApi } from 'ag-grid-community';
 import { LightstreamerClient, Subscription, ConsoleLogLevel, ConsoleLoggerProvider, ItemUpdate, StatusWidget } from 'lightstreamer-client-web/lightstreamer.esm';
 
@@ -18,9 +20,12 @@ interface StockItem {
 }
 
 @Component({
- selector: 'app-root',
- templateUrl: './app.component.html',
- styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, AgGridModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 
@@ -77,9 +82,9 @@ export class AppComponent {
     var item = this.getStockItem(update);
     var row = this.gridApi.getRowNode(item.stock_name);
     if (row) {
-      this.gridApi.applyTransaction({update: [item]})
+      this.gridApi.applyTransaction({ update: [item] })
     } else {
-      this.gridApi.applyTransaction({add: [item]});
+      this.gridApi.applyTransaction({ add: [item] });
     }
   }
 
